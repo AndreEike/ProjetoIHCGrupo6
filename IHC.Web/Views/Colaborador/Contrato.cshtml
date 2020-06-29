@@ -1,0 +1,42 @@
+﻿@model List<IHC.Web.Models.Contrato>
+@using IHC.Web.Models
+
+@{
+    ViewBag.Title = "Contrato";
+
+    string DataFim = "";
+}
+
+<h2>Contrato</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>Id</th>
+            <th>IdConvocação</th>
+            <th>Data Aceitação</th>
+            <th>Ativo</th>
+            <th>Data Fim</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Contrato c in Model)
+        {
+        <tr>
+            <td>@c.Id</td>
+            <td>@c.IdConvocacao</td>
+            <td>@c.DataAceite</td>
+            <td>@c.Ativo</td>
+
+            @{DataFim = c.DataFim.ToString() == DateTime.MaxValue.ToString() ? DataFim.ToString() : c.DataFim.ToString();}
+            <td>@DataFim</td>
+
+        </tr>
+        }
+
+    </tbody>
+</table>

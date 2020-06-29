@@ -1,0 +1,160 @@
+﻿@using IHC.Web.Models
+
+@{
+    List<Empresa> empresa = ViewBag.Empresa == null ? new List<Empresa>() : ViewBag.Empresa;
+    List<Colaborador> colaborador = ViewBag.Colaborador == null ? new List<Colaborador>() : ViewBag.Colaborador;
+
+}
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+
+@{
+    ViewBag.Title = "Cadastro";
+}
+
+
+@{ if (TempData["VerificaLogin"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Erro! Login já existe.<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+    if (TempData["VerificaLoginColaborador"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Erro! Colaborador já possui perfil.<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+
+
+    }
+    if (TempData["CadastroSucesso"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:green">
+            <b>Cadastro de usuário realizado com sucesso!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+
+
+    }
+    if (TempData["CadastroErro"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Erro ao gravar usuário!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+
+
+    }
+
+}
+
+<h2>Cadastro</h2>
+
+<br />
+@using (Html.BeginForm("Cadastro", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="login" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Senha</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="senha" required >
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Perfil</label>
+        <div class="col-sm-10">
+
+            <select class="form-control" name="perfil" required autocomplete="off" id="idSelect" onchange="Select(this.value)">
+                <option selected>Selecione um perfil de usuário</option>
+                <option value="empresa">Empresa</option>
+                <option value="colaborador">Colaborador</option>
+
+            </select>
+        </div>
+    </div>
+
+
+
+    <div class="form-group row" hidden id="divColaborador">
+        <label class="col-sm-2 col-form-label">Colaborador</label>
+        <div class="col-sm-10">
+
+            <select class="form-control" name="idColaborador" required autocomplete="off">
+                <option selected value="0"></option>
+                @foreach (Colaborador c in colaborador)
+                {
+                    <option value="@c.Id">@c.Nome</option>
+                }
+            </select>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group row" hidden id="divEmpresa">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Empresa</label>
+        <div class="col-sm-10">
+
+            <select class="form-control" name="idEmpresa" required autocomplete="off">
+                <option selected value="0"></option>
+                @foreach (Empresa e in empresa)
+                {
+                    <option value="@e.Id">@e.RazaoSocial</option>
+                }
+            </select>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group row">
+        <div>
+            @*<a href="/Login/LoginEmpresa" class="btn btn-primary" style="background-color:#222222; border:1px solid white">Voltar</a>*@
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+        </div>
+
+    </div>
+
+
+
+    <div>
+    </div>
+
+
+}
+
+<script>
+
+    function Select(value) {
+
+        var x = document.getElementById('idSelect');
+
+        var y = x.options[x.selectedIndex].value;
+
+        if (y == 'empresa') {
+            $('#divColaborador').attr('hidden', true);
+            $('#divEmpresa').attr('hidden', false);
+        }
+        if (y == 'colaborador') {
+            $('#divEmpresa').attr('hidden', true);
+            $('#divColaborador').attr('hidden', false);
+        }
+
+    }
+
+
+</script>

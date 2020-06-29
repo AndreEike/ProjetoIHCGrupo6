@@ -1,0 +1,49 @@
+﻿@model List<IHC.Web.Models.Colaborador>
+@using IHC.Web.Models
+
+@{
+    ViewBag.Title = "ListaColaborador";
+}
+
+@{
+    List<TipoContratacao> tipoContratacao = ViewBag.tipoContratacao == null ? new List<TipoContratacao>() : ViewBag.tipoContratacao;
+
+ }
+
+<h2>ListaColaborador</h2>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Contratação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Colaborador c in Model)
+        {
+        <tr>
+            <td>@c.Id</td>
+
+            <td>@c.Nome</td>
+            <td>@c.CPF</td>
+
+            <td>@c.Telefone</td>
+            <td>@c.Email</td>
+            @foreach (TipoContratacao t in tipoContratacao)
+            {
+                if (c.IdTipoContratacao == t.Id)
+                {
+                    <td>@t.Descricao</td>
+                }
+            }
+
+        </tr>
+        }
+
+    </tbody>
+</table>

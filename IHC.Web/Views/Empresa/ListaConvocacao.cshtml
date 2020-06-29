@@ -1,0 +1,75 @@
+﻿<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+
+@model List<IHC.Web.Models.Convocacao>
+@using IHC.Web.Models
+
+
+@{
+    ViewBag.Title = "ListaConvocacao";
+}
+@{
+    List<Colaborador> colaborador = ViewBag.Colaborador;
+    List<Convocacao> funcao = ViewBag.Funcao;
+
+}
+
+
+<h2 style="width:600px; ">ListaConvocacao @*- @DateTime.Now*@</h2>
+<br />
+<div style="border:1px solid white; width:auto; height:auto;padding:10px; background-color:#222; text-align:center; ">
+    @using (Ajax.BeginForm("ListaConvocacao", "Empresa", new AjaxOptions { HttpMethod = "Get", UpdateTargetId = "divListaConvocacao", InsertionMode = InsertionMode.Replace }))
+    {
+
+        <label style="width:auto;  padding:10px;">Status</label>
+
+        <select name="filtroStatus" autocomplete="off" id="idSelect_" style="width:200px; height:35px">
+            <option value="">Selecione um Status</option>
+            <option value="Todos">Todos</option>
+            <option value="Aguardando aceite">Aguardando aceite</option>
+            <option value="Recusada">Recusada</option>
+            <option value="Aceita">Aceita</option>
+            <option value="Recusa automática">Recusa automática</option>
+
+
+        </select>
+        <label style="width:auto;  padding:10px;margin-left:10px">Colaborador</label>
+        <select name="filtroColaborador"  autocomplete="off" id="idSelect_" style="width:200px; height:35px">
+            <option value="">Selecione um Colaborador</option>
+            <option value="Todos">Todos</option>
+            @foreach (Colaborador c in colaborador)
+            {
+                <option value="@c.Id">@c.Nome</option>
+            }
+
+        </select>
+        <label style="width:auto;  padding:10px;margin-left:10px">Função</label>
+        <select name="filtroFuncao"  autocomplete="off" id="idSelect_" style="width:200px; height:35px">
+            <option value="">Selecione uma Função</option>
+            <option value="Todos">Todos</option>
+            @foreach (Convocacao f in funcao)
+            {
+                <option value="@f.Funcao">@f.Funcao</option>
+            }
+
+        </select>
+        <label style="width:auto;  padding:10px;margin-left:10px">Confirmar até</label>
+        
+        <input type="date" name="filtroConfirmarAte" value="" style="width:200px; height:35px"/>
+
+        <input class="btn btn-default" type="submit" value="Filtar" style="width:80px;height:35px; text-align:center; margin-left:10px" />
+
+    }
+</div>
+
+<div id="div-lista-convocacao">
+    @Html.Partial("_PartialListaConvocacao", Model)
+
+</div>
+
+
+<script>
+
+
+</script>

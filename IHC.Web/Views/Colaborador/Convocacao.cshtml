@@ -1,0 +1,42 @@
+﻿<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+@model List<IHC.Web.Models.Convocacao>
+@using IHC.Web.Models
+
+
+@{
+    ViewBag.Title = "Convocacao";
+}
+
+
+<style>
+    div.col-sm-10 {
+        color: white;
+    }
+</style>>
+
+
+<h2>Convocacao</h2>
+
+<div id="div-convocacao-aceita">
+    @Html.Partial("_PartialConvocacao", Model)
+
+</div>
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog" style="width: 40%; ">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#222222;">
+                <button type="button" class="close" data-dismiss="modal" style="color:white">&times;</button>
+                <h3 class="modal-title">
+                    Endereço
+                </h3>
+            </div>
+            <div class="modal-body" id="myModalBodyDiv" style="padding:30px; ">
+            </div>
+
+        </div>
+    </div>
+</div>
+

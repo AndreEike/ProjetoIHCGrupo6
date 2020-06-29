@@ -1,0 +1,53 @@
+﻿
+@{
+    Layout = "_LayoutLogin.cshtml";
+}
+<style>
+    #login {
+        border-bottom-color: white;
+        /*border: 2px solid black;*/
+        text-align: center;
+        width: 500px;
+        position: absolute;
+        left: 35%;
+        top: 30%;
+        height: 300px;
+        vertical-align: middle;
+        background-color: white;
+        box-shadow: 0 0 1em grey;
+    }
+
+    #login_ {
+        margin: 5px;
+        width: 325px;
+        padding: 0px;
+        border: 1px solid grey;
+        height: 40px;
+    }
+</style>
+@{ if (TempData["LoginErro"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Login ou senha inválidos<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    } }
+
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div id="login">
+        <h2 style="color:black">Login</h2>
+        <div style="position:relative;top:10%">
+            <input id="login_" type="text" required autocomplete="off" name="login" placeholder="Usuário" style="padding-left:5px">
+            <br />
+            <input id="login_" type="password" required autocomplete="off" name="senha" placeholder="Senha" style="padding-left:5px">
+            <br />
+            <button id="login_" type="submit" class="btn btn-primary" style="background-color:#222222; border-color:#222222; ">Entrar</button>
+            <br />
+            <div style="margin:10px">
+                <div style="display:inline-flex" title="adm - 123">?</div>
+            </div>
+        </div>
+    </div>
+}

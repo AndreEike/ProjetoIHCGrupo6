@@ -1,0 +1,196 @@
+﻿@{
+    string perfil = "";
+    string login = "";
+    try
+    {
+        perfil = Session["Perfil"].ToString();
+        login = Session["Login"].ToString();
+    }
+    catch (Exception)
+    {
+
+        Response.Redirect("/Login/Login");
+    }
+
+
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        #footer.stikybottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0px 70px;
+        }
+
+        body {
+            padding-left: 70px;
+            padding-right: 70px;
+            padding-bottom: 0;
+            background-color: #333;
+        }
+
+        label, th, td, h1, h2, h3, h4 {
+            color: white;
+        }
+
+        input {
+            border-radius: 5px;
+            border-color: white;
+            color: black;
+        }
+
+        #divmsg {
+            border: 2px solid black;
+            background-color: #222222;
+            padding: 5px;
+            padding-right: 15px;
+        }
+
+        #navbar {
+            padding-left: 55px;
+            border: none;
+            color: black;
+        }
+
+        #li a, ul a {
+            color: white;
+            font-size: 20px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        th {
+            background-color: #222222;
+        }
+
+        /*#link a{
+            position: absolute;
+            right: -600px;
+            color: white;
+            font-size: 20px;
+
+        }*/
+
+    </style>
+</head>
+
+
+<body>
+    <div id="container">
+        <div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (perfil == "colaborador")
+                    {
+                        <li id="li">@Html.ActionLink("Index", "Index", "Home")</li>
+                        <li id="li">@Html.ActionLink("Convocações", "Convocacao", "Colaborador")</li>
+                        <li id="li">@Html.ActionLink("Contratos", "Contrato", "Colaborador")</li>
+                        <li id="li">@Html.ActionLink("Logout", "Logout", "Logout")</li>
+                    }
+                    @if (perfil == "empresa")
+                    {
+                        <li id="li">@Html.ActionLink("Index", "Index", "Home")</li>
+                        <li id="li">@Html.ActionLink("Colaboradores", "ListaColaborador", "Empresa")</li>
+                        <li id="li">@Html.ActionLink("Realizar Convocacao", "Convocacao", "Empresa")</li>
+                        <li id="li">@Html.ActionLink("Convocações Realizadas", "ListaConvocacao", "Empresa")</li>
+                        
+                        <li id="li">@Html.ActionLink("Logout", "Logout", "Logout")</li>
+                    }
+                    @if (perfil == "adm")
+                    {
+
+                        <li id="li">@Html.ActionLink("Index", "Index", "Home")</li>
+                        <li>
+
+                            <a href="#" data-toggle="dropdown" style="color:white">
+                                Empresa <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" style="background-color:#222222">
+                                <li id="li">@Html.ActionLink("Realizar Cadastro", "Cadastro", "Empresa")</li>
+                                <li id="li">@Html.ActionLink("Colaboradores", "ListaColaborador", "Empresa")</li>
+                                <li id="li">@Html.ActionLink("Realizar Convocação", "Convocacao", "Empresa")</li>
+
+
+
+                            </ul>
+                        </li>
+                        <li>
+
+                            <a href="#" data-toggle="dropdown" style="color:white">
+                                Colaborador <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" style="background-color:#222222">
+                                <li id="li">@Html.ActionLink("Cadastro", "Cadastro", "Colaborador")</li>
+                                <li id="li">@Html.ActionLink("Convocacao", "Convocacao", "Colaborador")</li>
+
+                                <li id="li">@Html.ActionLink("Contratos", "Contrato", "Colaborador")</li>
+
+
+                            </ul>
+                        </li>
+                        <li id="li">@Html.ActionLink("Usuário", "Cadastro", "Usuario")</li>
+                        <li id="li">@Html.ActionLink("Logout", "Logout", "Logout")</li>
+                        @*<li><a style="color:white"><img src="https://img.icons8.com/android/20/000000/user.png" /> @perfil</a></li>*@
+
+                    }
+
+                </ul>
+                @*<div style=" color: white; font-size: 20px; padding: 12px 30px;width:auto;height:50px;position:relative;right:110px;"><img src="https://img.icons8.com/android/25/000000/user.png" /></div>*@
+                <div style=" color: white; font-size: 15px; padding: 12px 30px;width:auto;height:50px;position:absolute;right:55px;"><img src="https://img.icons8.com/android/15/000000/user.png" />Usuário:   @login</div>
+            </div>
+
+
+        </div>
+        <div id="content">
+
+            @RenderBody()
+        </div>
+
+        <div id="footer">
+
+
+            <br />
+            <p style="color:white"><b>&copy; @DateTime.Now.Year - Grupo 6</b></p>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var element = document.getElementById('container');
+        var height = element.offsetHeight;
+
+        if (height < screen.height) {
+
+            document.getElementById("footer").classList.add('stikybottom');
+        }
+    }, false);
+
+
+    function divhidden() {
+        $('#divmsg').attr('hidden', true);
+    }
+</script>

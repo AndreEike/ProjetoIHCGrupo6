@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ihc.web:
+    image: ${DOCKER_REGISTRY-}ihcweb
+    build:
+      context: .\IHC.Web
+      dockerfile: Dockerfile

@@ -1,0 +1,90 @@
+﻿@model List<IHC.Web.Models.Convocacao>
+@using IHC.Web.Models
+
+
+@{
+    string styleStatus = "";
+    string EntradaH = "";
+    string EntradaM = "";
+    string SaidaH = "";
+    string SaidaM = "";
+
+    List<Colaborador> colaborador = ViewBag.Colaborador;
+
+}
+<div id="divListaConvocacao">
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Código</th>
+                <th>Colaborador</th>
+                <th>Início</th>
+                <th>Término</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Função</th>
+                <th>Valo/Hora</th>
+                <th>Confirmar até</th>
+
+                <th>Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Convocacao c in Model)
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    @foreach (Colaborador cl in colaborador)
+                    {
+                        if (cl.Id == c.IdColaborador)
+                        {
+                            <td>@cl.Nome</td>
+                        }
+                    }
+
+                    <td>@c.Inicio.ToString("dd/MM/yyyy")</td>
+                    <td>@c.Termino.ToString("dd/MM/yyyy")</td>
+                    @{
+                        if (c.EntradaHora < 10) { EntradaH = c.EntradaHora.ToString() + "0"; } else { EntradaH = c.EntradaHora.ToString(); }
+                        if (c.EntradaMinuto < 10) { EntradaM = c.EntradaMinuto.ToString() + "0"; } else { EntradaM = c.EntradaMinuto.ToString(); }
+                        if (c.SaidaHora < 10) { SaidaH = c.SaidaHora.ToString() + "0"; } else { SaidaH = c.SaidaHora.ToString(); }
+                        if (c.SaidaMinuto < 10) { SaidaM = c.SaidaMinuto.ToString() + "0"; } else { SaidaM = c.SaidaMinuto.ToString(); }
+                        <td>@EntradaH:@EntradaM</td>
+                        <td>@SaidaH:@SaidaM</td>
+                    }
+                    <td>@c.Funcao</td>
+                    <td>@c.ValorHora</td>
+                    <td>@c.ConfirmarAte.ToString("dd/MM/yyyy")</td>
+                    @{
+                        if (c.Status == "Aguardando aceite")
+                        {
+                            styleStatus = "orange";
+                        }
+                        else if (c.Status == "Recusada")
+                        {
+                            styleStatus = "red";
+                        }
+                        else if (c.Status == "Aceita")
+                        {
+                            styleStatus = "green";
+                        }
+                        else if (c.Status == "Recusa automática")
+                        {
+                            styleStatus = "red";
+                        }
+                        <td style="color:@styleStatus">@c.Status</td>
+
+                    }
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+<script>
+    
+
+</script>

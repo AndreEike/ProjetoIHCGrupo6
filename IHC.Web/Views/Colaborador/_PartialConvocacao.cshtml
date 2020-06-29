@@ -1,0 +1,194 @@
+﻿<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+@model List<IHC.Web.Models.Convocacao>
+@using IHC.Web.Models
+
+
+
+@{
+    //List<Convocacao> convocacao = ViewBag.Convocacao == null ? new List<Convocacao>() : ViewBag.Convocacao;
+    List<Empresa> empresa = ViewBag.Empresa == null ? new List<Empresa>() : ViewBag.Empresa;
+
+    //string styleStatus = "";
+    string EntradaH = "";
+    string EntradaM = "";
+    string SaidaH = "";
+    string SaidaM = "";
+}
+
+
+@{
+    if (TempData["ErroConvocacao"] != null)
+    {
+       
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Erro! Já existe um contrato ativo nesse período.<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+
+    if (TempData["SucessoConvocacao"] != null)
+    {
+       
+        <div id="divmsg" onclick="divhidden()" style="color:green">
+            <b>Convocação aceita!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+
+    if (TempData["SucessoRecusarConvocacao"] != null)
+    {
+       
+        <div id="divmsg" onclick="divhidden()" style="color:green">
+            <b>Convocação recusada!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+
+    if (TempData["ErroRecusarConvocacao"] != null)
+    {
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Erro ao recusar convocação!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+
+    if (TempData["AceitarRecusarConvocacaoAdm"] != null)
+    {
+        
+        <div id="divmsg" onclick="divhidden()" style="color:orange">
+            <b>Entre com um perfil de Colaborador para realizar o teste!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+        
+    }
+
+
+}
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Empresa</th>
+            <th>Início</th>
+            <th>Término</th>
+            <th>Entrada</th>
+            <th>Saída</th>
+            <th>Função</th>
+            <th>Valo/Hora</th>
+            <th>Confirmar até</th>
+            <th>Endereço</th>
+            <th>Aceitar</th>
+            <th>Recusar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Convocacao c in Model)
+        {
+            <tr>
+                @foreach (Empresa e in empresa)
+                {
+                    if (e.Id == c.IdEmpresa)
+                    {
+                        <td>
+                            @e.RazaoSocial
+                        </td>
+                    }
+
+                }
+
+                <td>@c.Inicio.ToString("dd/MM/yyyy")</td>
+                <td>@c.Termino.ToString("dd/MM/yyyy")</td>
+                @{
+                    if (c.EntradaHora < 10) { EntradaH = c.EntradaHora.ToString() + "0"; } else { EntradaH = c.EntradaHora.ToString(); }
+                    if (c.EntradaMinuto < 10) { EntradaM = c.EntradaMinuto.ToString() + "0"; } else { EntradaM = c.EntradaMinuto.ToString(); }
+                    if (c.SaidaHora < 10) { SaidaH = c.SaidaHora.ToString() + "0"; } else { SaidaH = c.SaidaHora.ToString(); }
+                    if (c.SaidaMinuto < 10) { SaidaM = c.SaidaMinuto.ToString() + "0"; } else { SaidaM = c.SaidaMinuto.ToString(); }
+                    <td>@EntradaH:@EntradaM</td>
+                    <td>@SaidaH:@SaidaM</td>
+                }
+                <td>@c.Funcao</td>
+                <td>@c.ValorHora</td>
+                <td>@c.ConfirmarAte.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a onclick="VerificarEndereco(@c.Id)" onmouseover="this.style.cursor='pointer'">
+                        <img src="https://img.icons8.com/office/20/000000/view-details.png" title="Verificar endereço" />
+                    </a>
+                </td>
+                @{
+                    //int d = DateTime.Compare(c.ConfirmarAte, DateTime.Now);
+                    if (c.ConfirmarAte.Date >= DateTime.Now.Date)
+                    {
+                        <td>
+                            <a onclick="AceitarConvocacao(@c.Id)" onmouseover="this.style.cursor='pointer'">
+                                <img src="https://img.icons8.com/ultraviolet/20/000000/checked.png" title="Aceitar convocação" />
+                            </a>
+                        </td>
+                    }
+
+                    else
+                    {
+                        <td>
+                            <a onmouseover="this.style.cursor='not-allowed'">
+                                <img src="https://img.icons8.com/ultraviolet/20/000000/expired.png" title="Convocação expirada" />
+                            </a>
+                        </td>
+                    }
+                }
+                <td>
+                    <a onclick="RecusarConvocacao(@c.Id)" onmouseover="this.style.cursor='pointer'">
+                        <img src="https://img.icons8.com/fluent/20/000000/cancel.png" title="Recusar convocação" />
+                    </a>
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    function AceitarConvocacao(Id) {
+
+        document.body.style.cursor = 'wait';
+        var url = "/Colaborador/AceitarConvocacao/?idConvocacao=parametroId";
+        url = url.replace("parametroId", Id);
+
+        url = encodeURI(url);
+
+        $.ajax({
+            url, method: 'post', success: function (data) {
+                document.body.style.cursor = 'default';
+                $('#div-convocacao-aceita').html(data);
+            }
+        });
+
+    }
+
+
+    function RecusarConvocacao(Id) {
+        document.body.style.cursor = 'wait';
+
+
+        var url = "/Colaborador/RecusarConvocacao/?idConvocacao=parametroId";
+        url = url.replace("parametroId", Id);
+
+        url = encodeURI(url);
+
+        $.ajax({
+            url, method: 'post', success: function (data) {
+                document.body.style.cursor = 'default';
+                $('#div-convocacao-aceita').html(data);
+            }
+        });
+    }
+
+    function VerificarEndereco(Id) {
+
+        var url = "/Colaborador/PartialVerificaEndereco/?Id=parametroId";
+        url = url.replace("parametroId", Id);
+        url = encodeURI(url);
+        $('#myModalBodyDiv').load(url, function () {
+            $('#myModal').modal("show")
+
+        })
+    }
+
+</script>

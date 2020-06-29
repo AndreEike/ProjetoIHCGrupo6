@@ -1,0 +1,167 @@
+﻿@using IHC.Web.Models
+
+
+
+@{
+    List<Colaborador> colaborador = ViewBag.ListColaborador;
+    if (colaborador == null) { colaborador = new List<Colaborador>(); }
+}
+@{
+    if (TempData["Convocacao"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:green">
+            <b>Convocação enviada com sucesso!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+    if (TempData["Convocacao_"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:red">
+            <b>Não foi possível enviar convocação!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+    if (TempData["ConvocacaoAdm"] != null)
+    {
+        <br />
+        <div id="divmsg" onclick="divhidden()" style="color:orange">
+            <b>Entre com um perfil de Empresa para realizar o teste!<span style="float:right" onmouseover="this.style.cursor='pointer'">X</span></b>
+        </div>
+    }
+}
+
+<h2>Convocação de Colaborador no Regime Intermitente</h2>
+<br />
+@using (Html.BeginForm("ConvocarEmLote", "Empresa", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:inline-flex; border:1px solid white; width:auto; height:auto;padding:10px; background-color:#222; text-align:center; ">
+        <label style="width:160px">Convocar em lote</label>
+        <input type="file" name="file" value="" style="color: white" />
+        <button type="submit" class="btn btn-primary">Convocar</button>
+    </div>
+}
+<br />
+<br />
+
+@using (Html.BeginForm("Convocacao", "Empresa", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div style="display:inline-flex; ">
+        <div>
+            <label>Colaborador</label>
+            <br />
+            <div style="display:inline-flex; ">
+                <label>Nome</label>
+                <select class="form-control" name="idColaborador" required autocomplete="off">
+                    <option selected></option>
+                    @foreach (Colaborador c in colaborador)
+                    {
+                        <option value="@c.Id">@c.Nome</option>
+                    }
+                </select>
+                <br />
+                <br />
+
+            </div>
+
+            <br />
+            <br />
+
+            <label>Periodo</label>
+            <br />
+
+            <label>Início</label>
+            <input class="form-control" type="date" required autocomplete="off" name="inicio">
+            <br />
+            <label>Término</label>
+            <input class="form-control" type="date" required autocomplete="off" name="termino">
+
+            <br />
+            <br />
+
+            <label>Horário</label>
+            <br />
+            <label>Entrada</label>
+            <input class="form-control" type="time" required autocomplete="off" name="entrada">
+            <br />
+            <label>Saída</label>
+            <input class="form-control" type="time" required autocomplete="off" name="saida">
+            <br />
+            <br />
+            <label>Função</label>
+            <input class="form-control" type="text" required autocomplete="off" name="funcao">
+            <br />
+            <br />
+            <label>Valor/Hora</label>
+            <input class="form-control" type="number" required autocomplete="off" name="valorHora">
+            <br />
+            <br />
+            <label>Confirmar até</label>
+            <input class="form-control" type="date" required autocomplete="off" name="confirmarAte">
+
+
+            <br />
+            <br />
+
+        </div>
+
+        <div style=" margin-left:80px">
+
+            <label>Endereço</label>
+            <br />
+            <label>Rua</label>
+            <input class="form-control" type="text" required autocomplete="off" name="rua">
+            <br />
+            <label>Número</label>
+            <input class="form-control" type="text" required autocomplete="off" name="numero">
+            <br />
+            <label>Complemento</label>
+            <input class="form-control" type="text" autocomplete="off" name="complemento">
+            <br />
+            <label>Bairro</label>
+            <input class="form-control" type="text" required autocomplete="off" name="bairro">
+            <br />
+            <label>CEP</label>
+            <input class="form-control" type="text" required autocomplete="off" name="cep">
+            <br />
+            <label>Cidade</label>
+            <input class="form-control" type="text" required autocomplete="off" name="cidade">
+            <br />
+            <label>Estado</label>
+            <input class="form-control" type="text" required autocomplete="off" name="estado">
+        </div>
+
+        <div style=" margin-left:80px">
+
+            <label>Email</label>
+            <br />
+            <label>Título</label>
+            <input class="form-control" type="text" autocomplete="off" name="titulo" value="" />
+            <br />
+            <label>Mensagem</label>
+            <textarea class="form-control" type="text" autocomplete="off" name="Mensagem"></textarea>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div style="display:block">
+        <br />
+        <button type="submit" class="btn btn-primary">Convocar</button>
+    </div>
+
+
+
+
+
+
+
+}
+
